@@ -1,0 +1,17 @@
+﻿{% extends 'blog/base.html' %}
+
+{% block content %}
+{% include 'blog/api_paginate.html' %}
+{% endblock %}
+
+{% block header %}
+<div id="cont">    
+    <div  id="exit">
+        <form action="/logout/" method="POST">
+            {% csrf_token %}
+            <input type="submit" class="btn" value="Выйти"/>
+        </form> 
+    </div>
+
+</div>
+{% endblock %} 

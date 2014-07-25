@@ -1,0 +1,22 @@
+﻿{% extends 'blog/enter.html' %}
+{% block content %}    
+    {% if form.errors %}
+        <h1 class="error">Сожалеем, вы неправильно ввели логин или пароль</h1>
+    {% endif %}
+  
+    <div class="container_login" >
+        <div class="oe_single_form_logo" align="center">
+            <img src="http://www.trilan.ru/media/images/logo_new1.png">
+        </div><hr>
+        <div id="enter">
+            <form action="/login/" method="POST">
+                {% csrf_token %}
+                {{ form.as_table }} <br>
+                <div id="but_log" align="center">
+                    <input type="submit" class="btn" value="Войти"/>
+                </div>
+            </form>  
+        </div>
+    </div>    
+{% endblock %} 
+

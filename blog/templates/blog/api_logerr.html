@@ -1,0 +1,8 @@
+﻿{% extends 'blog/base.html' %}
+
+{% block content %}    
+  {% if error = 'true' %}
+    <p class="error">Сожалеем, вы неправильно ввели логин или пароль</p>
+  {% endif %}
+{% endblock %} 
+
