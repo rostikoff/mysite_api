@@ -1,26 +1,35 @@
 <div id="mail">
     <input type="hidden" value="{{ page }}" id="in_pole">
-    <input type="hidden" value="{{ max_page }}" id="max_in_pole">
-    <input type="hidden" value="{{ mail_page }}" id="max_in_elem">
-    <input type="hidden" value="{{ data_count }}" id="max_in_vsego">
-    <input type="hidden" value="{{ domain_name }}" id="tek_domain_name"> 
+    <input type="hidden" value="{{ max_page }}" id="max_in_pole">    
     <table class="table table-striped table-bordered">
+    <form>
         <thead>
             <tr>
-                <th width="20px"><input type="checkbox" class="check" id="check_all"></th>
-                <th width="275px">Почтовый ящик</th>
+                <th width="20px"><input type="checkbox" class="check" id="check_all" onclick="show_but_del()" ></th>
+                <th width="260px">Почтовый ящик</th>
                 <th width="20px" class="col_mess" title="Непрочитанные сообщения"><i class="icon-envelope"></i></th>
-                <th>Zergus</i></th>
+                <th width="95x" class="th_option no_mark">Управление</th>
+                <th>Статус</th>
             </tr>
         </thead>
-        {% for data in data %}
+        {% for key, val in data.items %}
         <tbody>
             <tr>
-                <td class="no_mark"><input type="checkbox" name="cheks" class="check" id="{{ data.mail_name }}"></td>
-                <td>{{ data.mail_name }}<span id="domain_name">{{ domain_name }}</span></td>        
-                <td class="col_mess">{{ data.mail_mails }}</td>
+                <td class="no_mark"><input type="checkbox" name="cheks" class="check" id="{{ val.email }}" onclick="show_but_del()" ></td>
+                <td>{{ val.email }}<span id="domain_name">{{ domain_name }}</span></td>        
+                <td class="col_mess">{{ val.mess }}</td>
+                <td class="option_mail no_mark">
+                    <div class="knop btn_table no_mark" id="tab_but_del" onclick="ajax_del()" title="Удалить e-mail">
+                        <i class="icon-trash"></i>
+                    </div>      
+                    <div class="knop btn_table no_mark" id="tab_but_option" onclick="but_option()" title="Настроить e-mail">
+                        <i class="icon-wrench"></i>
+                    </div>       
+                </td>
+                <td>Blocked</td>
             </tr>
         </tbody>
         {% endfor %} 
+    </form>
     </table> 
     </div> 

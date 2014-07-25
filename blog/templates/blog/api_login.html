@@ -9,10 +9,16 @@
             <img src="http://www.trilan.ru/media/images/logo_new1.png">
         </div><hr>
         <div id="enter">
-            <form action="/login/" method="POST">
+            <form action="/login/" method="POST" autocomplete="off">
+                <div class="input-prepend" id="div_i_log"> 
+                    <span class="add-on" id="sp_i_log"><i class="icon-user"></i></span>
+                </div>
+                <div class="input-prepend" id="div_i_pass"> 
+                    <span class="add-on" id="sp_i_pass"><i class="icon-lock"></i></span>
+                </div>
                 {% csrf_token %}
-                {{ form.as_table }} <br>
-                <div id="but_log" align="center">
+               <div class="massaracsh">  {{ form.as_table }} </div><br>
+               <div id="but_log">
                     <input type="submit" class="btn" value="Войти"/>
                 </div>
             </form>  

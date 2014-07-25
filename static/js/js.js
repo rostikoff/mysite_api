@@ -1,8 +1,5 @@
 ﻿function ajax_form(e) { 
-var data_form   = $(e).serialize(); 
-name =  $('.add_name').val();
-domain_name =  $('#tek_domain_name').val();
-
+var data_form   = $(e).serialize();
         $.ajax({
                 type: 'POST',
                 async: true,
@@ -17,17 +14,16 @@ domain_name =  $('#tek_domain_name').val();
                 id='#add_success';
                 
                 setTimeout(function() { 
-                $('#addform').fadeOut('300');
-                setTimeout(function() {
-                $('#add_success').css({ 'display' :'none' });                                 
                 $('.add_pass').val('');
-                $('.add_name').val('');}, 400)
-                }, 1500);
-                //pagin_ind('r');
-                $('#mail .table').prepend("<tbody><tr><td class='no_mark'><input type='checkbox' name='cheks' class='check' id='"+name+"'></td><td>"+name+"<span id='domain_name'>"+domain_name+"</span></td><td>0</td></tr></tbody>");                
-                i=0;
-                $('#mail .table tbody:last-child').remove(); 
-                $('#jump_3').text(parseInt ($('#jump_3').text()) +1);
+                $('.add_name').val('');
+                }, 1500)
+                
+                setTimeout(function() { 
+                $('#addform').fadeOut('1000');
+                $('#add_success').css({ 'display' :'none' });
+                }, 2000)
+                
+                pagin_ind('1');
                 index=0;
                 } 
                 else
@@ -48,16 +44,8 @@ domain_name =  $('#tek_domain_name').val();
 function pagin_ind(strn) { 
 t_str = $('#in_pole').val();
 max_pag = $('#max_in_pole').val();
-
-n_pag = t_str+1;
-p_pag = t_str-1;
-
-if (p_pag<1 && strn=='l') {return false;}
-if (n_pag>max_pag && strn=='r' ) {return false;}
-if (strn[0]=='n') {t_str=1;id_filtr=strn.substring(1);} else {id_filtr = $('.active a').attr('id');}
-
- //console.log(id_filtr);
-
+if (t_str==1 && strn=='l') {return false;}
+if (t_str==max_pag && strn=='r' ) {return false;} 
 $.ajax({
                 type: 'POST',
                 async: true,
@@ -65,29 +53,15 @@ $.ajax({
                 url: '/xml_res_pagin/',
                 data: { 
                         page: t_str,
-                        sost: strn,
-                        filtr: id_filtr
+                        sost: strn
                       },
-            success: function(data){     
-                    $('#mail').html(data);
-                    str = $('#in_pole').val();
-                    max = $('#max_in_elem').val();
-                    vsego = $('#max_in_vsego').val();
-                    max_str = $('#max_in_pole').val();
-                    
-                    if ($('#jump_4').text()=='') {$('#jump_4').text(' – ');}
-                    if (str==max_str) {$('#jump_1').text(vsego);}
-                    else {$('#jump_1').text((str)*max);}
-                    $('#jump_0').text(((str-1)*max)+1);
-                    if (vsego==(((str-1)*max)+1)) {$('#jump_0').text('');$('#jump_4').text('');}
-                    $('#jump_3').text(vsego);
-                    if (vsego=='0') {$('#jump_1').text('0');$('#jump_0').text('');$('#jump_4').text('');}
-                                      
+                success: function(data){     
+                        $('#mail').html(data);
+                    },
+                error:  function(data){
+
                 },
-            error:  function(data){
-console.log(data.responseText);
-            },
-            complete: function(data) { 
+                complete: function(data) { 
 
                  }
   });
@@ -121,6 +95,7 @@ $.ajax({
 
             },
             complete: function(data) { 
+                $('.windows8').fadeOut('300');
                 //alert('данные: ' + data); 
                 //console.log(data.responseText);
                  }
@@ -129,26 +104,13 @@ $.ajax({
 
 function aj_filtr(e) {
         event.preventDefault();
-        //console.log(e.id);
+        console.log(e.id);
         i = 0;
         $('.nav-list li').each(function(elem) {i++;
-        if (i==1) {} else {$(this).attr('class', '');$(this).attr('style', '');}
+        if (i==1) {} else {$(this).attr('class', '');}
         });
-        
-        $(e).css('background-color', '#EEEEEE');
-        setTimeout(function() {$(e).attr('style', '');pagin_ind('n'+e.id);
-
-        i2 = 0;
-        $('.nav-list li').each(function(elem) {i2++;
-        if (i2==1) {} else {$(this).attr('class', '');}
-        
         $(e).parent('li').attr('class', 'active');
-        });
-
-        }, 1000);               
 }
-
-
 
 
 

@@ -1,5 +1,5 @@
 ﻿# coding: utf-8
-from blog.models import Mail, Komment, Tags , MailTag
+from blog.models import Mail, Komment, Tags
 import datetime
 from django.utils import timezone
 from django.shortcuts import get_object_or_404,render_to_response, redirect
@@ -14,7 +14,6 @@ import xml.dom.minidom
 from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from math import *
-from django.db.models import Max
 
 from blog.forms import ContactForm,LoginForm
 
@@ -24,7 +23,7 @@ from blog.forms import ContactForm,LoginForm
 #  path = api_url + api_metod + ".xml?token=" + api_token + api_param
 api_token = 'd7ac05a85997048a3e6ea16f657c58923475f1d48df43bc2fbfcd482'
 api_url = 'https://pddimp.yandex.ru/'
-mail_page = 5.0 #формат ввода 2.0(два ТОЧКА ноль)
+mail_page = 25.0 #формат ввода 2.0(два ТОЧКА ноль)
 domain_name = '@testapi.ssido.ru'
 
 
@@ -59,21 +58,18 @@ def login_views(request):
             form = LoginForm()
         return render_to_response('blog/api_login.html', {'form': form},context_instance=RequestContext(request))
     else:
-        #данные о ящиках в базу данных                 &on_page='+str(mail_page)+'
-        data = xml_res_par(request,'get_domain_users','&page=1','email','name', '2')
+        #данные о ящиках
+        data = xml_res_par(request,'get_domain_users','&on_page='+str(mail_page)+'&page=1','email','name', '2')
         #количество страниц обработка
-        data_count = Mail.objects.all().count()
-        max_page = data_count / mail_page
+        data_count = xml_res_par(request,'get_domain_users','','email','name', '1')
+        max_page = len(data_count['email']) / mail_page
         max_page=int(ceil(max_page))
         #категории для фильтра
         all_filtr = Tags.objects.all()
-        #данные из бд
-        data = Mail.objects.all()
-        data = data.order_by('-mail_numb')
-        paginator = Paginator(data, int(mail_page))
-        page1 = paginator.page(1)   
+        
+        
 
-        return render_to_response('blog/api_index.html', {"data": page1.object_list, "page": '1', "domain_name": domain_name, 'max_page': max_page, 'all_filtr': all_filtr,'mail_page':int(mail_page),'data_count':data_count,},context_instance=RequestContext(request))
+        return render_to_response('blog/api_index.html', {"data": data, "page": '1', "domain_name": domain_name, 'max_page': max_page, 'all_filtr': all_filtr,},context_instance=RequestContext(request))
     
     
 def xml_res_par(request, api_metod, api_param, sch1, sch2, param):
@@ -85,20 +81,15 @@ def xml_res_par(request, api_metod, api_param, sch1, sch2, param):
     movies = collection.getElementsByTagName(sch1)
     data = []
     data5 = dict()
-    data6 = dict() 
+    data6 = dict()
+    i = 0
     if param == '2':
-        Mail.objects.all().delete()
-        max = Mail.objects.all().aggregate(Max('mail_numb'))
-        i = max['mail_numb__max']
         for movie in movies:
             type = movie.getElementsByTagName(sch2)[0]
             mail_unread = xml_res_seachattr(request,'get_mail_info','&login='+type.childNodes[0].data,'new_messages')
             str = type.childNodes[0].data
             str = str.split('@')
-            try:
-                i=i-1
-            except TypeError :
-                i = 1000
+            i=i+1
             #data5[str[0]] = mail_unread['res']
             data5 = {'email' : str[0], 'mess' : mail_unread['res']}
             data6 [ i ] = data5
@@ -107,21 +98,11 @@ def xml_res_par(request, api_metod, api_param, sch1, sch2, param):
             if len(sch) == 0:                
                 m = Mail(
                     mail_name = qwe,
+                    mail_tags = 1,
                     mail_mails = mail_unread['res'],
-                    mail_numb = i,
                 )
                 m.save()
-                sch = MailTag.objects.filter(mail_name__exact=qwe)
-                if len(sch) == 0:
-                    m2 = MailTag(
-                        mail_name = qwe,
-                        mail_mails = 0,                        
-                        mail_tags = 1,
-                    )
-                    m2.save()
-                
         data1 = data6
-        sync_mail_mailtag(request)
     else:
         for movie in movies:
             type = movie.getElementsByTagName(sch2)[0]
@@ -177,15 +158,6 @@ def reg_user_token(request):
             if  "+" in li:
                 message = "Пользователь успешно добавлен"
                 type_err = 0
-                lcount = Mail.objects.all().count()
-                nuu = Mail.objects.all().aggregate(Max('mail_numb'))
-                m = Mail(
-                    mail_name = name,
-                    mail_tags = 1,
-                    mail_mails = 0,
-                    mail_numb = nuu['mail_numb__max']+1,
-                )
-                m.save()
             else:
                 type_err = 1
                 if len(passw)<1 or len(name)<1:
@@ -212,30 +184,20 @@ def xml_res_pagin(request):
     if request.is_ajax():
         page=int(request.POST.get("page", ""))
         sost=request.POST.get("sost", "")
-        filtr=request.POST.get("filtr", "")
+        data_count = xml_res_par(request,'get_domain_users','','email','name', '1')
+        max_page = len(data_count['email']) / mail_page
         
-        #количество страниц обработка
-        if filtr=='1':
-            data_count = Mail.objects.all().count()
-            data = Mail.objects.all()
-        else:
-            data_count = MailTag.objects.filter(mail_tags__exact=filtr).count()
-            data = MailTag.objects.filter(mail_tags__exact=filtr)
-            #data = Mail.objects.filter(mail_name__exact=data1)
-        
-        max_page = data_count / mail_page
-        max_page=int(ceil(max_page))
-        
-        #data = data.order_by('-mail_numb')
-        paginator = Paginator(data, int(mail_page))
-        
-        if sost=='r':
-            page = page +1                
-        if sost=='l':
+        if sost=='r' and page >=1 and page<=max_page:
+            page = page +1
+        if sost=='l' and page >1:
             page = page - 1
-        page1 = paginator.page(page)    
 
-    return render_to_response('blog/api_paginate.html', {"data": page1.object_list,"page": page,"domain_name": domain_name , 'max_page': max_page,'mail_page':int(mail_page),'data_count':data_count, })  
+        data = xml_res_par(request,'get_domain_users','&on_page='+str(mail_page)+'&page='+str(page),'email','name', '2')
+        data_count = xml_res_par(request,'get_domain_users','','email','name', '1')
+        max_page = len(data_count['email']) / mail_page
+        max_page=int(ceil(max_page))
+    
+    return render_to_response('blog/api_paginate.html', {"data": data,"page": page,"domain_name": domain_name, 'max_page': max_page, })  
 
 @csrf_exempt
 def delete_user(request):
@@ -246,25 +208,17 @@ def delete_user(request):
             name = str(name) 
             if name != '':
                 data1 = xml_res_str(request,'delete_user','&login='+str(name),'ok') 
-                qwe = str(name)
-                Mail.objects.filter(mail_name__exact=qwe).delete()
                 message = "Удалено"                    
             else:       
                 message = "Неверное имя"   
     return HttpResponse(message)      
  
-
-def sync_mail_mailtag(request):
-    data = Mail.objects.all()
-    for data in data:
-        sch = MailTag.objects.get(mail_name=data.mail_name)
-        sch.mail_mails = data.mail_mails
-        sch.save()
-    data2 = MailTag.objects.all()
-    #for data2 in data2:
-        #sch2 = Mail.objects.get(mail_name=data2.mail_name)
-        #if (sch.mail_mails==''):
-        #    MailTag.objects.get(mail_name=data2.mail_name).delete()
-    res = 1
-    return res  
+@csrf_exempt
+def api_filtr(request):
+    if request.is_ajax():
+        data=str(request.POST.get("data", ""))
+        data = data.split(',')
+          
+    return HttpResponse(message)
+    
     

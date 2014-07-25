@@ -4,19 +4,12 @@ import datetime
 from django.utils import timezone
 
 
-class MailTag(models.Model):
-    mail_name = models.CharField(max_length=255) 
-    mail_tags = models.CharField(max_length=255)
-    mail_mails = models.IntegerField(max_length=255)    
-
-    
-    
 class Mail(models.Model):
     mail_name = models.CharField(max_length=255) 
     datetime = models.DateTimeField(u'Дата',auto_now_add=True) 
-    mail_numb = models.IntegerField(max_length=255)
-    mail_mails = models.IntegerField(max_length=255)
-    
+    mail_tags = models.TextField(max_length=10000)
+    mail_mails = models.TextField(max_length=10000)
+
     def __unicode__(self):
         return self.mail_name
 

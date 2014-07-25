@@ -32,18 +32,18 @@
         <nav>
 		<div class="menu">
 				<div id="menu1">
-					<a class="btn" id="s1" href="#" data-title="Управление массаракшами">МасСаракш</a>
+					<a class="btn" id="s1" href="#" title="Управление доменом">Домен</a>
 				</div>
 				<div id="menu2">
-					<a class="btn" id="s2" href="#"  data-title="Управление зергами">Зерг</a>
+					<a class="btn" id="s2" href="#" title="Управление почтой">Почта</a>
 				</div>
 				<div id="menu3">
-					<a class="btn" id="s3" href="#" data-title="Управление бобрами">Бобр</a>
+					<a class="btn" id="s3" href="#" title="Управление бобрами">Бобр</a>
 				</div>
         </div>                
 		</nav>        
         <div class="input-prepend" id="poisk">
-            <span class="add-on"><i class="icon-envelope"></i></span>
+            <span class="add-on"><i class="icon-search"></i></span>
             <input class="span2" id="inputIcon" type="text">
         </div>            
     </div><!-- header.END -->  
@@ -52,28 +52,17 @@
         {% block extra_header %}
         {% endblock %}
         <div class="btn-group">
-            <div class="knop" id="but_sel">
-                <div id="img_sel">
-                    <img src="/static/img/arrow_down.png" alt="">
-                </div>
-            </div>
-            <div class="knop" id="but_del" onclick="ajax_del()" title="Удалить e-mail"><div id="img_del"></div></div>
+            <div class="knop" id="but_up" onclick="ajax_del()" title="Обновить"><div id="img_up"></div></div>
+            <div class="knop" id="but_sel" title="Управление e-mail'ом"><div id="img_sel"><img src="/static/img/arrow_down.png" alt=""></div></div>
             <div class="knop" id="but_add" onclick="but_add()" title="Добавить e-mail"><div id="img_add"></div></div>
+            <div class="knop" id="but_del" onclick="ajax_del()" title="Удалить выбранное"><div id="img_del"></div></div>
         </div>
-        <div class="knop" id="but_right"><img src="/static/img/right.png" alt="" onclick="pagin_ind('r')"></div>
-        <div class="knop" id="but_left"><img src="/static/img/left.png" alt="" onclick="pagin_ind('l')"></div>
+        <div class="knop" id="but_right" title="Следующие"><img src="/static/img/right.png" alt="" onclick="pagin_ind('r')"></div>
+        <div class="knop" id="but_left" title="Предыдущие"><img src="/static/img/left.png" alt="" onclick="pagin_ind('l')"></div>
         <div class="jump">
-            <span id="jump_0">1</span>
-            <span id="jump_4"> – </span>
-            <span id="jump_1">
-            {% if  data_count < mail_page %}
-            {{ data_count }}
-            {% else %}
-            {{ mail_page }}
-            {% endif %}            
-            </span> 
+            <span id="jump_1">{{ 1 }} – {{ 25 }}</span> 
             <span id="jump_2"> из </span> 
-            <span id="jump_3">{{ data_count }}</span>
+            <span id="jump_3">{{ 50 }}</span>
         </div> 
     </div><!-- extra_header.end -->        
     
@@ -86,38 +75,24 @@
             {% else %}
             <li>
             {% endif %}
-            <a href="" onclick="aj_filtr(this)" class="filter" id="{{ all_filtr.id }}">{{ all_filtr.tags_name }}</a>      
-        {% endfor %}             
-            <br>
-            <br>
+            <a href="" onclick="aj_filtr(this)" id="filtr_{{ all_filtr.id }}">{{ all_filtr.tags_name }}</a></li>
+        {% endfor %}   
         <div class="new_filter" >
             <input class="btn" id="btn_fil_add" type="button"  onclick="new_fil()" title="Добавить фильтр">
             <input class=" " id="inp_fil_add" type="text">
         </div>
-
         </ul>
     </div><!-- right.END --> 
     
     <div class="content">      <!-- ##############  content       #########################-->
     
-    <div class="windows8">
-        <div class="wBall" id="wBall_1">
-        <div class="wInnerBall">    </div>
-        </div>
-        <div class="wBall" id="wBall_2">
-        <div class="wInnerBall">    </div>
-        </div>
-        <div class="wBall" id="wBall_3">   
-        <div class="wInnerBall">    </div>
-        </div>
-        <div class="wBall" id="wBall_4">
-        <div class="wInnerBall">    </div>
-        </div>
-        <div class="wBall" id="wBall_5">
-        <div class="wInnerBall">    </div>
-        </div>
-    </div>        
-        
+        <div class="windows8">
+            <div class="wBall" id="wBall_1"><div class="wInnerBall"></div></div>
+            <div class="wBall" id="wBall_2"><div class="wInnerBall"></div></div>
+            <div class="wBall" id="wBall_3"><div class="wInnerBall"></div></div>
+            <div class="wBall" id="wBall_4"><div class="wInnerBall"></div></div>
+            <div class="wBall" id="wBall_5"><div class="wInnerBall"></div></div>
+        </div>            
         
        <div id="addform">
             <form method="post" name="loginform" onsubmit="ajax_form(this);return false;" autocomplete="off">  {% csrf_token %}
@@ -136,6 +111,24 @@
                         <div class="alert alert-info" id="add_info"></div>
                     </div>
                 <input class="btn"  id="add" type="submit" name="login" value="Добавить">
+            </form>
+        </div>
+        
+       <div id="form_options">
+            <form method="post" name="loginform" onsubmit="ajax_form(this);return false;" autocomplete="off">  {% csrf_token %}
+                <legend>NAME@testapi.ssido.ru</legend>
+                <input class="re_pass" type="password" name="pass1" placeholder="New password"><br>
+                <input class="re_pass" type="password" name="pass2" placeholder="Password again"><br>
+                <div id="reload_pass">
+                    <input class="btn" type="button" id="re_generate" value="Случайный пароль"><br>
+                    <input class="btn" type="button" id="re_show" value="Показать пароль">
+                    <input class="btn"  id="reload" type="submit" name="pass_reload" value="Сохранить пароль">
+                </div>
+                    <div id="alert_box">
+                        <div class="alert alert-error" id="re_error"></div>
+                        <div class="alert alert-success" id="re_success"></div>
+                        <div class="alert alert-info" id="re_info"></div>
+                    </div>
             </form>
         </div>
         

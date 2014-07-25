@@ -8,6 +8,14 @@ body {  height: 100%;   }
 .check{  
     cursor:default !important;   
 }
+.no_mark{    
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 /*  #######################   HEADER   ################################  */
 .logo1{
     margin-top:10px;
@@ -112,28 +120,27 @@ body {  height: 100%;   }
 .btn-group{
     margin-left:255px;
 }
-    #but_sel{
+    #but_up{
         float:left;
         height:23px;
         width:50px;
-        border-radius:2px 0px 0px 2px;    
+        border-radius:2px;
+        margin-left:0px;
+        margin-right:15px;    
     }
-        #img_sel{    
-            height:22px;
+        #img_up{    
+            height:25px;
             width:20px;    
-            margin-left:10px;
-            background: no-repeat url(/static/img/general_black.png) 0 -354px;
+            margin-left:15px;
+            background: no-repeat url(/static/img/general_black.png) 0 -191px;
         }
-            #img_sel img{  
-                margin-left:23px;
-                margin-top:2px;
-            }
     #but_del{
+        display:none;
         float:left;
         height:23px;
         width:50px;
         border-radius:0px;
-        margin-left:0px;
+        margin-left:15px;
     }    
         #img_del{    
             height:25px;
@@ -155,6 +162,23 @@ body {  height: 100%;   }
             background: no-repeat url(/static/img/general_black.png) 0 -17px;
         }
         
+#but_sel{
+    float:left;
+    height:23px;
+    width:50px;
+    border-radius:2px 0px 0px 2px;    
+}
+    #img_sel{    
+        height:22px;
+        width:20px;    
+        margin-left:10px;
+        background: no-repeat url(/static/img/general_black.png) 0 -354px;
+    }
+        #img_sel img{  
+            margin-left:23px;
+            margin-top:2px;
+        }
+
         
 .knop{
     float:right;
@@ -194,7 +218,7 @@ body {  height: 100%;   }
         color:#111111 !important;
         font-size:77%;
     }
-    #jump_1,#jump_0, #jump_3, #jump_4{
+    #jump_1, #jump_3{
         color:#111111 !important;
         font-size:85%; 
         font-weight:bold;
@@ -213,9 +237,86 @@ body {  height: 100%;   }
     padding-left:3px;
     padding-right:20px;
 }	
+
+
+
+
+/*  CONTENT >>> OPTIONS_FORM   ################################  */
+#form_options{
+    display:none;
+    top:180px; left:355px;
+    width:275px;
+	height:275px;
+	cursor:default;
+	color:#999999;
+    font-size:12px;
+    padding:0px 13px;
+	position:fixed;	
+	z-index:4;
+    margin-top:-5px;
+    margin-left: -10px;
+    border-radius:2px;
+    border:1px solid  rgba(175,175,175,0.4);
+        background: #f9f9f9 !important;
+        box-shadow: 0 3px 5px rgba(0,0,0,.5);
+}
+    #form_options legend{
+        font-size:1.6em;
+        color:#555;        
+    }   
+    #form_options .re_pass{
+            border-radius:2px;
+            width:100px;
+            height:18px;
+            font-size:13px;
+        }  
+    #reload_pass{
+        margin-top:-74px;
+        margin-right:30px;
+    }   
+        #form_options #re_generate{
+            float:right;
+            line-height: 20px;
+            width:120px;
+            height:23px;
+            padding:1px 0px;
+            margin-top:0px;
+            margin-right:0px;
+            font-size:100%;
+            }
+        #form_options #re_show{
+            float:right;
+            line-height: 20px;
+            width:120px;
+            height:23px;
+            padding:1px 0px;
+            margin-top:15px;
+            margin-right:0px;
+            font-size:100%;
+            }
+    #form_options #reload{
+            float:right;
+            margin-top:23px;
+            margin-right:0px;
+            padding:1px 0px;
+            width:120px;
+            height:23px;
+            font-size:100%;
+        }
+#alert_box{
+    height:35px;
+}
+    .alert{
+        border-radius:2px;
+        display:none;
+        padding:5px 7px;
+    }
+    
+
+/*  CONTENT >>> ADD_FORM   ################################  */
 #addform{
     width:345px;
-	height:275px;
+	height:270px;
 	cursor:default;
     display:none;
 	color:#999999;
@@ -241,7 +342,7 @@ body {  height: 100%;   }
     #addform .add_pass{
         border-radius:2px;
         width:120px;
-        height:20px;
+        height:18px;
         font-size:13px;
     }
     #addform #span_domen{
@@ -252,6 +353,7 @@ body {  height: 100%;   }
         float:right;
         line-height: 20px;
         width:120px;
+        height:23px;
         padding:1px 0px;
         margin-top:3px;
         margin-right:75px;
@@ -262,8 +364,9 @@ body {  height: 100%;   }
         float:right;
         line-height: 20px;
         width:120px;
+        height:23px;
         padding:1px 0px;
-        margin-top:16px;
+        margin-top:13px;
         margin-right:75px;
         font-size:100%;
         }
@@ -273,6 +376,7 @@ body {  height: 100%;   }
             margin-right:0px;
             padding:1px 0px;
             width:75px;
+            height:23px;
             font-size:100%;
         }
 #alert_box{
@@ -283,6 +387,9 @@ body {  height: 100%;   }
         display:none;
         padding:5px 7px;
     }
+    
+/*  CONTENT >>> TABLE   ################################  */ 
+
 .table{
     margin-top:7px;
     border-radius:2px;
@@ -294,26 +401,47 @@ body {  height: 100%;   }
     }
     .table th, 
     .table td{
-        padding:6px;
+        padding:7px;
     }
-    .col_mess{
-        padding-left:10px !important;
-        padding-right:0px !important;
+    .table th,
+    .table .option_mail{
+        cursor:default;
     }
-    .icon-envelope{
-        margin-left:-3px;
-    }
-.no_mark{    
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.col_mess{
+    padding-left:10px !important;
+    padding-right:0px !important;
+}
+.icon-envelope{
+    margin-left:-3px;
 }
 #domain_name{
     color:#999999;
+} 
+.th_option{
+    padding-left:12px !important;
+    padding-right:3px !important;
+    
 }
+.option_mail{
+    padding:0px !important;
+    padding-top:5px !important;
+}
+.btn_table{
+    float:left;
+    margin:0px !important;
+    height:18px !important;
+    font-size:87%;
+    width:15px !important;
+    padding:1px 6px;
+    padding-top:1px ;
+    padding-left:7px;
+}
+    #tab_but_option{
+    margin-left:20px !important;
+    }
+    #tab_but_del{
+    margin-left:15px !important;
+    }
 /*  #######################   RIGHT   ################################  */
 
  #right{
@@ -389,27 +517,58 @@ body {  height: 100%;   }
     box-shadow: 0 2px 7px rgba(0,0,0,0.4);
     background: #f7f7f7 ;
 }
-    .container_login input {
-        border-radius:3px;
+    .massaracsh input{
+        border-radius:0px 3px 3px 0px;
         width: 70%;
         height:35px;
         margin:0.95% 15%;
+        margin-left: 20%;
         text-align:left;
     }
-#but_log{
-    border-radius:3px;
+.container_login #enter #but_log{
+    border-radius:2px !important;
     margin-top:20px;
     background:#ffffff;
+    width:100px;
+    margin-top:-7px;
+    margin-left:120px;
 }   
- 
+#div_i_log{
+    position:absolute;
+    top:105px;
+    left:43px;
+}
+    #sp_i_log{
+        border-radius:3px 0px 0px 3px;
+        height:25px;
+    }
+        #sp_i_log i{
+            margin-top:5px;
+            margin-left:1px;
+        }
+        
+#div_i_pass{
+    position:absolute;
+    top:145px;
+    left:43px;
+}
+    #sp_i_pass{
+        border-radius:3px 0px 0px 3px;
+        height:25px;
+    }
+        #sp_i_pass i{
+            margin-top:5px;
+            margin-left:0px;
+        }
  /*-############## DOWNLOAD_DIV ######################   */ 
 .windows8 {
-    top:30%;
-    left:50%;
+    top:235px;
+    left:575px;
     position: fixed;
     width: 60px;
     height:60px;    
     z-index:100;
+    display:none;
 }
 
 .windows8 .wBall {
@@ -719,4 +878,4 @@ body {  height: 100%;   }
     opacity: 0;
     transform: rotate(985deg);
 }
-}  
+}
